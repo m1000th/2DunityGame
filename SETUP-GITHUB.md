@@ -42,7 +42,7 @@ git add .gitignore
 git add .
 git commit -m "Estructura inicial del proyecto Unity"
 git branch -M main
-git remote add origin https://github.com/<usuario-u-org>/<nombre-repo>.git
+git remote add origin https://github.com/m1000th/2DunityGame.git
 git push -u origin main
 ```
 
@@ -58,8 +58,8 @@ git push -u origin develop
 Cada compañero, después de aceptar la invitación:
 
 ```bash
-git clone https://github.com/<usuario-u-org>/<nombre-repo>.git
-cd <nombre-repo>
+git clone https://github.com/m1000th/2DunityGame.git
+cd 2DunityGame
 git lfs install
 git checkout develop
 ```

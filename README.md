@@ -1,10 +1,12 @@
-# [Nombre del Juego]
+# 2DunityGame
+
+> **Nombre definitivo del juego:** a definir por el equipo.
 
 Proyecto de Unity desarrollado por un equipo de 4 personas.
 
 ## Requisitos
 
-- Unity (versión: _completar con la versión exacta que usan, ej. 2022.3.XXf1 LTS_)
+- Unity **6000.5.9f1** (línea Unity 6) — todos deben usar exactamente esta misma versión
 - Git
 - [Git LFS](https://git-lfs.com/) (obligatorio, ver instrucciones abajo)
 
@@ -16,7 +18,7 @@ Proyecto de Unity desarrollado por un equipo de 4 personas.
    ```
 2. Clonar el repo:
    ```
-   git clone https://github.com/<usuario-u-org>/<nombre-repo>.git
+   git clone https://github.com/m1000th/2DunityGame.git
    ```
 3. Abrir la carpeta del proyecto con Unity Hub (usar la misma versión de Unity que el resto del equipo).
 
