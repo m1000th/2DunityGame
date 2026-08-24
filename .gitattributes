@@ -1,0 +1,59 @@
+# ============================
+# .gitattributes - configuración de Git LFS para Unity
+# ============================
+
+# Forzar LF en archivos de texto/YAML de Unity (evita conflictos entre Windows/Mac/Linux)
+*.cs text diff=csharp
+*.cginc text
+*.shader text
+
+*.mat text
+*.anim text
+*.unity text
+*.prefab text
+*.physicsMaterial2D text
+*.physicsMaterial text
+*.asset text
+*.meta text
+*.controller text
+
+# Imágenes y texturas -> Git LFS
+*.png filter=lfs diff=lfs merge=lfs -text
+*.jpg filter=lfs diff=lfs merge=lfs -text
+*.jpeg filter=lfs diff=lfs merge=lfs -text
+*.tga filter=lfs diff=lfs merge=lfs -text
+*.tif filter=lfs diff=lfs merge=lfs -text
+*.psd filter=lfs diff=lfs merge=lfs -text
+*.gif filter=lfs diff=lfs merge=lfs -text
+*.exr filter=lfs diff=lfs merge=lfs -text
+*.hdr filter=lfs diff=lfs merge=lfs -text
+
+# Audio -> Git LFS
+*.wav filter=lfs diff=lfs merge=lfs -text
+*.mp3 filter=lfs diff=lfs merge=lfs -text
+*.ogg filter=lfs diff=lfs merge=lfs -text
+*.aiff filter=lfs diff=lfs merge=lfs -text
+
+# Video -> Git LFS
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+*.mov filter=lfs diff=lfs merge=lfs -text
+
+# Modelos 3D -> Git LFS
+*.fbx filter=lfs diff=lfs merge=lfs -text
+*.obj filter=lfs diff=lfs merge=lfs -text
+*.blend filter=lfs diff=lfs merge=lfs -text
+*.max filter=lfs diff=lfs merge=lfs -text
+*.3ds filter=lfs diff=lfs merge=lfs -text
+
+# Fuentes -> Git LFS
+*.ttf filter=lfs diff=lfs merge=lfs -text
+*.otf filter=lfs diff=lfs merge=lfs -text
+
+# Otros binarios comunes -> Git LFS
+*.dll filter=lfs diff=lfs merge=lfs -text
+*.exe filter=lfs diff=lfs merge=lfs -text
+*.pdb filter=lfs diff=lfs merge=lfs -text
+*.unitypackage filter=lfs diff=lfs merge=lfs -text
+
+# Unity usa "Smart Merge" para escenas y prefabs - configurarlo en Unity ayuda
+# a resolver conflictos automáticamente en archivos .unity y .prefab
