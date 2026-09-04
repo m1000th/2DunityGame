@@ -1,25 +1,50 @@
-# ============================
-# .gitignore para proyectos Unity
-# (basado en la plantilla oficial de GitHub para Unity)
-# ============================
+# =============================================================
+#  .gitignore para Unity  ·  2DunityGame / Verdict Zero
+# =============================================================
+#  Fusion de la configuracion inicial de gastx con los ajustes
+#  que necesita este proyecto en concreto (Plastic, .slnx).
+#
+#  Las rutas van ancladas con "/" al principio para que solo
+#  afecten a la raiz del proyecto: sin la barra, una carpeta de
+#  arte llamada "Build" o "Temp" dentro de Assets/ se ignoraria
+#  sin querer y nadie se enteraria.
+#
+#  Lo que SI se sube: Assets/ (con todos sus .meta),
+#  ProjectSettings/ y Packages/
+# -------------------------------------------------------------
 
-# Carpetas generadas por Unity que NO se versionan
-[Ll]ibrary/
-[Tt]emp/
-[Oo]bj/
-[Bb]uild/
-[Bb]uilds/
-[Ll]ogs/
-[Uu]ser[Ss]ettings/
-[Mm]emoryCaptures/
+# --- Carpetas generadas por Unity (aqui pesan >2 GB) ---------
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
 
-# Archivos generados por Visual Studio / Rider / VSCode
+# --- Unity Version Control (Plastic) -------------------------
+# Este proyecto tenia un workspace de Plastic. Se ignora para
+# que no ensucie el historial de Git.
+/.plastic/
+ignore.conf
+/[Aa]ssets/Plugins/PlasticSCM*
+
+# --- Editores e IDE ------------------------------------------
 .vs/
 .vscode/
 .idea/
+.vsconfig
+.gradle/
+/[Aa]ssets/Plugins/Editor/JetBrains*
+
+ExportedObj/
+.consulo/
 *.csproj
 *.unityproj
 *.sln
+*.slnx
 *.suo
 *.tmp
 *.user
@@ -32,31 +57,29 @@
 *.opendb
 *.VC.db
 
-# Archivos de compilación de Unity
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# --- Autogenerados por Unity ---------------------------------
+sysinfo.txt
+crashlytics-build.properties
+
+# --- Ejecutables y paquetes ----------------------------------
 *.apk
 *.aab
 *.unitypackage
 *.app
-ExportedObj/
-.consulo/
-*.svd
-crashlytics-build.properties
+*.androidlib
 
-# Auto-generados por Unity al abrir el proyecto
-sysinfo.txt
+# --- Addressables y StreamingAssets --------------------------
+/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
+/[Aa]ssets/[Ss]treamingAssets/aa.meta
+/[Aa]ssets/[Ss]treamingAssets/aa/*
 
-# Caches de paquetes (opcional: si usan Package Manager, no versionar el cache)
-[Pp]ackages/*
-!Packages/manifest.json
-!Packages/packages-lock.json
-
-# Archivos del sistema operativo
+# --- Sistema operativo ---------------------------------------
 .DS_Store
 Thumbs.db
-desktop.ini
-
-# Archivos de Rider
-.idea/
-
-# Archivos de Gradle (Android)
-*.androidlib
+ehthumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/

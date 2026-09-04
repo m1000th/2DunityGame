@@ -1,0 +1,105 @@
+========================================================
+ VERDICT ZERO - Mensajes para el grupo de WhatsApp
+========================================================
+ Copia y pega cada bloque como un mensaje separado.
+ Los asteriscos se convierten en negrita automaticamente.
+ Manda tambien el PDF adjunto: Verdict_Zero_Guia.pdf
+========================================================
+
+
+---------- MENSAJE 1: el plan ----------
+
+*VERDICT ZERO - plan de 4 semanas*
+
+Os paso la guia completa en PDF. Resumen de como vamos a trabajar:
+
+*Semana 1* - Que el personaje salte bien (nivel gris, sin arte)
+*Semana 2* - Que sea un juego (menu, morir, checkpoints, meta)
+*Semana 3* - Los 4 niveles, cortos, de 1 a 2 minutos
+*Semana 4* - Sonido, .exe y entrega
+
+Cada viernes hay un objetivo que tiene que estar cumplido. Si no llega, se recorta contenido. Lo que NUNCA se recorta es la semana 4.
+
+
+---------- MENSAJE 2: el recorte ----------
+
+*Lo que lleva el juego y lo que NO*
+
+Esto no se negocia durante el proyecto. Si a alguien se le ocurre algo nuevo en la semana 2, la respuesta es no.
+
+*SI lleva:*
+- Correr y saltar
+- Un golpe = muerte, reapareces en el checkpoint
+- Un tipo de enemigo que patrulla
+- Pinchos
+- Meta al final de cada nivel
+- Menu, pausa y creditos
+- Arte gratuito descargado (kenney.nl)
+
+*NO lleva:*
+- Doble salto, dash, agacharse
+- Barra de vida ni corazones
+- Jefes ni enemigos que disparan
+- Coleccionables ni puntuacion
+- Opciones ni selector de niveles
+- Dibujar sprites propios
+
+Lo de "un golpe = muerte" suena a recorte pobre pero es al reves: nos ahorra la barra de vida, el HUD y la invulnerabilidad temporal. Solo pide checkpoints generosos.
+
+
+---------- MENSAJE 3: quien hace que ----------
+
+*Reparto*
+
+*Persona 1 - Jugador y camara*
+Movimiento, salto, muerte y reaparicion. La que mas presion tiene la semana 1.
+
+*Persona 2 - Enemigos y prefabs*
+Enemigo, pinchos, checkpoint, meta. Semana 3 monta 2 niveles.
+
+*Persona 3 - Niveles y arte*
+Tilemaps de los 4 niveles, importar el pack de Kenney, animaciones.
+
+*Persona 4 - Menus, build y entrega*
+Menu, pausa, cambio de escena, sonido. Saca una build cada viernes y la prueba en otro PC.
+
+Los lunes y martes de la semana 1 los cuatro hacemos el mismo tutorial de Unity Learn. A partir de ahi cada uno a lo suyo.
+
+
+---------- MENSAJE 4: reglas ----------
+
+*5 reglas del equipo*
+
+1. *Una escena, una persona.* Se avisa por aqui antes de abrir una escena y al terminar de subirla. Los archivos .unity y .prefab NO se pueden fusionar: si dos los tocamos a la vez, uno pierde el trabajo entero.
+
+2. *Descargar antes de empezar, subir al terminar.* Cada sesion, aunque este a medias.
+
+3. *Todo lo que se repite es un prefab.*
+
+4. *Los numeros van en el Inspector*, no dentro del codigo.
+
+5. *15 minutos cada dia*, no una reunion larga a la semana. Que dije, que hare, en que estoy atascado. Con 4 semanas nadie puede estar atascado mas de un dia en silencio.
+
+
+---------- MENSAJE 5: para empezar ya ----------
+
+*Lo que hay que hacer YA*
+
+1. Instalar Unity Hub y la version *6000.5.10f1* exacta. Unity Hub va a ofrecer versiones mas nuevas: no las cojais. Marcad el modulo *Windows Build Support* al instalar o no hay .exe.
+
+2. NO crear ningun proyecto. El proyecto ya existe y esta en GitHub. Se clona y se abre desde Unity Hub con Add > Add project from disk.
+
+3. Cuando lo abrais: Project Settings > Player > Other Settings > *Active Input Handling* = *Both*, y reiniciar Unity. Sin esto el codigo del jugador peta al darle a Play.
+
+4. Descargad un pack de plataformas 2D de *kenney.nl* (es gratis y libre). Con eso el arte esta resuelto.
+
+
+---------- MENSAJE 6: aviso importante ----------
+
+*Lo mas importante de todo*
+
+Vamos a sacar un .exe de prueba *el viernes de la semana 1*, aunque solo haya un cubo blanco saltando.
+
+Las builds fallan por cosas que no aparecen en el editor de Unity. Con 4 semanas no nos podemos permitir descubrirlo el ultimo miercoles.
+
+Y cuando lo entreguemos: se manda la *carpeta entera comprimida en ZIP*, no solo el .exe. Sin la carpeta _Data al lado el juego no arranca. Es el fallo de entrega mas frecuente que existe.

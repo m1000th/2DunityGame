@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8">
+<title>Verdict Zero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+:root{
+  --paper:#f1f2ef; --surface:#ffffff; --surface-2:#e8eae5;
+  --ink:#15181a; --ink-2:#3d4448; --slate:#636b71;
+  --rule:#d6d9d2; --rule-strong:#b7bcb3;
+  --brass:#8a6113; --brass-wash:#f0e7d3;
+  --alert:#8d3120; --alert-wash:#f6e8e4;
+  --ok:#2e6045; --ok-wash:#e5efe8;
+  --code-bg:#1b1e21; --code-ink:#e3e5e0; --code-dim:#8d9599;
+  --shadow:0 1px 2px rgba(20,24,26,.05), 0 8px 24px -16px rgba(20,24,26,.28);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#101214; --surface:#181b1e; --surface-2:#202427;
+    --ink:#e9eae6; --ink-2:#c3c7c5; --slate:#949b9f;
+    --rule:#282c30; --rule-strong:#3b4146;
+    --brass:#d9a441; --brass-wash:#2a2317;
+    --alert:#e08a72; --alert-wash:#2b1c18;
+    --ok:#7fc09b; --ok-wash:#16241c;
+    --code-bg:#0b0d0f; --code-ink:#dfe1dd; --code-dim:#7d868a;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#101214; --surface:#181b1e; --surface-2:#202427;
+  --ink:#e9eae6; --ink-2:#c3c7c5; --slate:#949b9f;
+  --rule:#282c30; --rule-strong:#3b4146;
+  --brass:#d9a441; --brass-wash:#2a2317;
+  --alert:#e08a72; --alert-wash:#2b1c18;
+  --ok:#7fc09b; --ok-wash:#16241c;
+  --code-bg:#0b0d0f; --code-ink:#dfe1dd; --code-dim:#7d868a;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px; line-height:1.68;
+  -webkit-font-smoothing:antialiased;
+  margin:0; padding:0 20px 96px;
+}
+h1,h2,h3,h4,.sans{font-family:Archivo,"Helvetica Neue",Arial,sans-serif}
+code,kbd,pre,.mono{font-family:"JetBrains Mono",ui-monospace,Consolas,monospace}
+
+.wrap{max-width:1100px;margin:0 auto}
+
+.masthead{padding:60px 0 36px;border-bottom:2px solid var(--ink)}
+.eyebrow{
+  font-family:Archivo,sans-serif;font-size:11.5px;font-weight:600;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--brass);margin:0 0 20px
+}
+h1{
+  font-size:clamp(48px,10vw,100px);font-weight:800;letter-spacing:-.035em;
+  line-height:.92;margin:0;text-wrap:balance;
+}
+h1 .zero{color:var(--brass)}
+.deck{font-size:19px;color:var(--ink-2);max-width:58ch;margin:24px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.chip{
+  font-family:Archivo,sans-serif;font-size:12px;font-weight:600;letter-spacing:.04em;
+  padding:5px 11px;border:1px solid var(--rule-strong);border-radius:2px;
+  color:var(--ink-2);background:var(--surface);
+}
+
+.grid{display:block}
+@media (min-width:1020px){
+  .grid{display:grid;grid-template-columns:180px minmax(0,1fr);gap:52px;align-items:start}
+}
+.rail{display:none}
+@media (min-width:1020px){
+  .rail{display:block;position:sticky;top:32px;padding-top:52px;
+    font-family:Archivo,sans-serif;font-size:13px}
+}
+.rail-title{
+  font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--slate);margin:0 0 12px;padding-bottom:10px;border-bottom:1px solid var(--rule)
+}
+.rail a{
+  display:flex;gap:10px;padding:6px 0;color:var(--ink-2);text-decoration:none;
+  border-bottom:1px solid var(--rule)
+}
+.rail a:hover,.rail a:focus-visible{color:var(--brass)}
+.rail a .n{color:var(--slate);font-variant-numeric:tabular-nums;font-weight:600;min-width:18px}
+.rail a:hover .n{color:var(--brass)}
+
+section{padding-top:52px;scroll-margin-top:24px}
+h2{
+  font-size:clamp(26px,3.5vw,36px);font-weight:700;letter-spacing:-.025em;
+  line-height:1.1;margin:0 0 8px;text-wrap:balance
+}
+h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin:32px 0 10px}
+p{margin:0 0 16px;max-width:66ch}
+.lead{font-size:18.5px;color:var(--ink-2);max-width:62ch}
+a{color:var(--brass);text-underline-offset:2px}
+
+.phase-head{
+  display:flex;gap:20px;align-items:flex-start;
+  border-top:2px solid var(--ink);padding-top:18px;margin-bottom:20px
+}
+.phase-num{
+  font-family:Archivo,sans-serif;font-weight:800;font-size:clamp(38px,6vw,58px);
+  line-height:.85;color:var(--brass);letter-spacing:-.05em;font-variant-numeric:tabular-nums;
+  flex:0 0 auto
+}
+.phase-meta{
+  font-family:Archivo,sans-serif;font-size:12.5px;font-weight:500;color:var(--slate);
+  margin-top:6px;display:flex;flex-wrap:wrap;gap:6px 16px
+}
+.phase-meta b{color:var(--ink-2);font-weight:600}
+
+ol.steps{counter-reset:s;list-style:none;padding:0;margin:20px 0 0;
+  display:flex;flex-direction:column;gap:16px}
+ol.steps>li{counter-increment:s;position:relative;padding-left:42px;max-width:70ch}
+ol.steps>li::before{
+  content:counter(s,decimal-leading-zero);position:absolute;left:0;top:2px;
+  font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:700;color:var(--brass);
+  border:1px solid var(--rule-strong);border-radius:2px;padding:2px 5px;background:var(--surface)
+}
+ol.steps>li>strong{font-family:Archivo,sans-serif;font-weight:700;display:block;margin-bottom:2px}
+ul.bul{margin:10px 0 16px;padding-left:20px;max-width:66ch}
+ul.bul li{margin-bottom:7px}
+
+.note{border-left:3px solid var(--rule-strong);padding:14px 0 14px 18px;margin:22px 0;max-width:68ch}
+.note .tag{
+  font-family:Archivo,sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--slate);display:block;margin-bottom:5px
+}
+.note p:last-child{margin-bottom:0}
+.trap{border-left-color:var(--alert);background:var(--alert-wash);padding-right:18px}
+.trap .tag{color:var(--alert)}
+.gate{
+  border:1px solid var(--ok);background:var(--ok-wash);border-left:3px solid var(--ok);
+  padding:14px 18px;margin:26px 0 0;max-width:68ch;border-radius:2px
+}
+.gate .tag{
+  font-family:Archivo,sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ok);display:block;margin-bottom:5px
+}
+.gate p{margin:0;max-width:none}
+
+.tw{overflow-x:auto;margin:22px 0;border:1px solid var(--rule);border-radius:2px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-family:Archivo,sans-serif;font-size:14px;min-width:500px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--rule);vertical-align:top}
+thead th{
+  font-size:11px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--slate);background:var(--surface-2);white-space:nowrap
+}
+tbody tr:last-child td{border-bottom:none}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--slate);font-weight:600}
+td.yes{color:var(--ok);font-weight:600}
+td.no{color:var(--alert);font-weight:600}
+
+.cards{display:grid;gap:14px;margin:24px 0;grid-template-columns:1fr}
+@media(min-width:620px){.cards{grid-template-columns:1fr 1fr}}
+.card{
+  background:var(--surface);border:1px solid var(--rule);border-radius:2px;
+  padding:18px 20px;box-shadow:var(--shadow)
+}
+.card .role{
+  font-family:Archivo,sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--brass);margin-bottom:6px
+}
+.card h3{margin:0 0 8px;font-size:18px}
+.card ul{margin:0;padding-left:18px;font-size:15.5px;line-height:1.55}
+.card ul li{margin-bottom:5px}
+
+pre{
+  background:var(--code-bg);color:var(--code-ink);border-radius:3px;
+  padding:18px 20px;overflow-x:auto;font-size:13px;line-height:1.6;margin:18px 0;
+  border:1px solid var(--rule)
+}
+pre code{color:inherit;background:none;padding:0;border:none;font-size:inherit}
+pre .c{color:var(--code-dim);font-style:italic}
+code{
+  font-size:.87em;background:var(--surface-2);color:var(--ink);
+  padding:1px 5px;border-radius:2px;border:1px solid var(--rule)
+}
+
+.tree{
+  background:var(--surface);border:1px solid var(--rule);border-radius:2px;
+  padding:16px 20px;font-family:"JetBrains Mono",monospace;font-size:12.5px;
+  line-height:1.75;overflow-x:auto;margin:18px 0;color:var(--ink-2)
+}
+.tree b{color:var(--ink);font-weight:700}
+.tree i{color:var(--slate);font-style:normal}
+
+.check{list-style:none;padding:0;margin:18px 0}
+.check li{
+  display:flex;gap:12px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--rule);
+  font-family:Archivo,sans-serif;font-size:15px
+}
+.check li::before{
+  content:"";flex:0 0 auto;width:13px;height:13px;border:1.5px solid var(--rule-strong);
+  border-radius:2px;transform:translateY(1px)
+}
+hr{border:none;border-top:1px solid var(--rule);margin:44px 0}
+footer{
+  margin-top:60px;padding-top:22px;border-top:2px solid var(--ink);
+  font-family:Archivo,sans-serif;font-size:13px;color:var(--slate);max-width:66ch
+}
+:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="masthead">
+  <p class="eyebrow">Plan de 4 semanas &middot; Equipo de 4 &middot; Unity 2D</p>
+  <h1>Verdict <span class="zero">Zero</span></h1>
+  <p class="deck">Cuatro semanas, cuatro personas, cuatro niveles cortos y un <code>.exe</code> que funciona. Se puede, pero solo si el juego es pequeño a propósito.</p>
+  <div class="chips">
+    <span class="chip">Unity 6000.5.10f1</span>
+    <span class="chip">Plantilla 2D URP</span>
+    <span class="chip">4 niveles de 1–2 min</span>
+    <span class="chip">1 golpe = muerte</span>
+    <span class="chip">Arte descargado</span>
+  </div>
+</header>
+
+<div class="grid">
+
+<nav class="rail" aria-label="Índice">
+  <p class="rail-title">Plan</p>
+  <a href="#alcance"><span class="n">&rsaquo;</span> El recorte</a>
+  <a href="#dia1"><span class="n">&rsaquo;</span> Día 1</a>
+  <a href="#roles"><span class="n">&rsaquo;</span> Roles</a>
+  <p class="rail-title" style="margin-top:24px">Semanas</p>
+  <a href="#s1"><span class="n">01</span> Que salte</a>
+  <a href="#s2"><span class="n">02</span> Que sea juego</a>
+  <a href="#s3"><span class="n">03</span> Los 4 niveles</a>
+  <a href="#s4"><span class="n">04</span> El .exe</a>
+  <p class="rail-title" style="margin-top:24px">Referencia</p>
+  <a href="#reglas"><span class="n">&rsaquo;</span> Reglas</a>
+  <a href="#retraso"><span class="n">&rsaquo;</span> Si vais tarde</a>
+  <a href="#entrega"><span class="n">&rsaquo;</span> Entrega</a>
+</nav>
+
+<main>
+
+<section id="intro">
+  <p class="lead">Con cuatro semanas y sin experiencia previa, el juego que entreguéis lo decide una sola cosa: cuánto recortéis hoy. No hay tiempo para aprender y diseñar a la vez, así que el diseño ya viene decidido en este plan y vosotros solo aprendéis lo que haga falta para ejecutarlo.</p>
+  <p>Cada semana tiene un punto de control. Si el viernes no se cumple, se recorta contenido — nunca se roba tiempo de la semana 4.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th class="num">Semana</th><th>Objetivo</th><th>El viernes tiene que existir</th></tr></thead>
+      <tbody>
+        <tr><td class="num">1</td><td>Que el personaje salte bien</td><td>Un nivel gris jugable y la <b>primera build de prueba</b></td></tr>
+        <tr><td class="num">2</td><td>Que sea un juego</td><td>Menú, morir, reaparecer, llegar a la meta, pasar al nivel siguiente</td></tr>
+        <tr><td class="num">3</td><td>Los 4 niveles</td><td>El juego entero jugable de principio a fin, con arte puesto</td></tr>
+        <tr><td class="num">4</td><td>Pulir y entregar</td><td>Sonido, <code>.exe</code> probado en otro PC y ZIP entregado</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ ALCANCE ============ -->
+<section id="alcance">
+  <div class="phase-head">
+    <div class="phase-num">&rsaquo;</div>
+    <div>
+      <h2>El recorte: qué lleva y qué no</h2>
+      <div class="phase-meta"><span>La decisión más importante de todo el proyecto</span></div>
+    </div>
+  </div>
+
+  <p>Esta lista no se negocia durante el proyecto. Si alguien propone una idea nueva en la semana 2, la respuesta es no.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th></th><th>Lo que sí lleva</th><th></th><th>Lo que no lleva</th></tr></thead>
+      <tbody>
+        <tr><td class="yes">SÍ</td><td>Correr y saltar</td><td class="no">NO</td><td>Doble salto, dash, escalar, agacharse</td></tr>
+        <tr><td class="yes">SÍ</td><td><b>Un golpe = muerte</b> y reapareces en el checkpoint</td><td class="no">NO</td><td>Barra de vida, corazones, curación</td></tr>
+        <tr><td class="yes">SÍ</td><td>Un tipo de enemigo que patrulla</td><td class="no">NO</td><td>Varios enemigos, jefes, enemigos que disparan</td></tr>
+        <tr><td class="yes">SÍ</td><td>Pinchos (obstáculo fijo que mata)</td><td class="no">NO</td><td>Trampas complejas, interruptores, puertas con llave</td></tr>
+        <tr><td class="yes">SÍ</td><td>Meta al final de cada nivel</td><td class="no">NO</td><td>Coleccionables, puntuación, tiempo récord</td></tr>
+        <tr><td class="yes">SÍ</td><td>Menú, pausa y pantalla de créditos</td><td class="no">NO</td><td>Opciones, ajustes de volumen, selector de niveles</td></tr>
+        <tr><td class="yes">SÍ</td><td>Arte gratuito descargado</td><td class="no">NO</td><td>Dibujar sprites propios</td></tr>
+        <tr><td class="yes">SÍ</td><td>Animaciones: quieto, corriendo, saltando</td><td class="no">NO</td><td>Animaciones de ataque, muerte, daño</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <span class="tag">Por qué un golpe mata</span>
+    <p>Suena a recorte pobre y es justo al revés: os ahorra la barra de vida, el HUD, la invulnerabilidad temporal y el parpadeo del sprite — cuatro sistemas que dan problemas. Muchos plataformas muy buenos funcionan exactamente así. Lo único que exige a cambio es <b>checkpoints generosos</b>.</p>
+  </div>
+</section>
+
+<!-- ============ DÍA 1 ============ -->
+<section id="dia1">
+  <div class="phase-head">
+    <div class="phase-num">&rsaquo;</div>
+    <div>
+      <h2>Día 1: los cuatro juntos, una tarde</h2>
+      <div class="phase-meta"><span><b>No empecéis nada</b> hasta terminar esta lista</span></div>
+    </div>
+  </div>
+
+  <div class="note">
+    <span class="tag">Estado actual del proyecto</span>
+    <p>El proyecto ya existe en <code>C:\Users\USUARIO\Verdict_Zero</code>, con la plantilla <b>2D&nbsp;(URP)</b> y Unity <b>6000.5.10f1</b>. El repositorio de Git ya está montado, con <code>.gitignore</code>, <code>.gitattributes</code> y LFS funcionando. Los pasos 1, 2 y 3 de abajo <b>ya están hechos</b>: quedan del 4 en adelante.</p>
+  </div>
+
+  <ol class="steps">
+    <li><strong>Instalad Unity Hub y la misma versión de Unity</strong> <code>6000.5.10f1</code>, <b>exactamente esa cadena los cuatro</b>. Unity Hub os ofrecerá versiones más nuevas: no las cojáis. Durante la instalación marcad el módulo <span class="mono">Windows Build Support</span>, o no habrá <code>.exe</code>.</li>
+    <li><strong>El proyecto ya está creado</strong> Nadie más crea uno. Los otros tres clonan el repositorio y lo abren desde Unity Hub con <span class="mono">Add &rsaquo; Add project from disk</span>.</li>
+    <li><strong>Los dos ajustes que hacen que Git funcione</strong> Ya están correctos, pero conviene saber qué son: en <span class="mono">Edit &rsaquo; Project Settings &rsaquo; Editor</span>, <b>Asset Serialization</b> = <code>Force Text</code> y <b>Version Control</b> = <code>Visible Meta Files</code>. Explicación abajo.</li>
+    <li><strong>Arreglad el sistema de input &mdash; esto sí es urgente</strong> El proyecto viene con el Input System nuevo <i>solamente</i>, así que el código del plan lanza una excepción al darle a Play. En <span class="mono">Project Settings &rsaquo; Player &rsaquo; Other Settings</span> poned <b>Active Input Handling</b> = <code>Both</code> y reiniciad Unity.</li>
+    <li><strong>Subid el proyecto a GitHub</strong> Cread un repositorio <b>vacío</b> en github.com (sin README ni <code>.gitignore</code>) y conectadlo. Instalad <b>GitHub Desktop</b> para el día a día: los otros tres no van a tocar la terminal.</li>
+    <li><strong>Descargad el arte ahora</strong> Id a <b>kenney.nl</b> y coged un pack de plataformas 2D: tiles, personaje, enemigos, UI y sonidos, todo con el mismo estilo. Es CC0, se puede usar libremente. Con esto el apartado artístico está resuelto.</li>
+    <li><strong>Fijad tres números y no los cambiéis</strong> Resolución <b>1920&times;1080</b>, tile de <b>32&times;32 px</b>, <b>Pixels Per Unit = 32</b>.</li>
+    <li><strong>Poned bien el nombre del producto</strong> En <span class="mono">Project Settings &rsaquo; Player</span>: <b>Product Name</b> = <code>Verdict Zero</code> (con espacio, es lo que da nombre al <code>.exe</code>) y <b>Company Name</b> = el nombre del equipo, en vez de <code>DefaultCompany</code>.</li>
+  </ol>
+
+  <h3>Qué hacen los dos ajustes de Git</h3>
+  <p>No es trivia: si uno de los dos está mal, el proyecto se rompe para todo el equipo y no os enteráis hasta la semana 3.</p>
+  <ul class="bul">
+    <li><b>Asset Serialization = Force Text.</b> Guarda las escenas y prefabs como texto en vez de binario. Git solo entiende texto: si son binarios, lo único que puede deciros es «este archivo cambió», sin mostrar qué. <b>Ojo:</b> esto no hace que las escenas se puedan fusionar sin riesgo — el YAML de Unity está lleno de IDs internos y una fusión automática suele producir una escena corrupta. Hace los conflictos visibles, no inofensivos. Por eso la regla de <i>una escena, una persona</i> sigue en pie.</li>
+    <li><b>Version Control = Visible Meta Files.</b> Cada archivo de <code>Assets/</code> tiene un <code>.meta</code> al lado con un <b>GUID</b> único y sus ajustes de importación. Unity referencia los assets <b>por GUID, no por ruta</b>. Si alguien sube un <code>.png</code> sin su <code>.meta</code>, Unity le genera uno nuevo con otro GUID en el ordenador de al lado, y todas las referencias de todas las escenas se rompen: sprites en blanco y <i>Missing (Mono Script)</i> por todo el Inspector.</li>
+  </ul>
+  <p>De ahí salen dos reglas prácticas: los <code>.meta</code> <b>siempre</b> se suben, y renombrar o mover assets se hace <b>siempre desde dentro de Unity</b>, nunca desde el Explorador de Windows — que mueve el archivo y deja el <code>.meta</code> atrás.</p>
+
+  <div class="note trap">
+    <span class="tag">Trampa clásica</span>
+    <p>Los archivos <code>.meta</code> parecen basura y no lo son: conectan cada sprite y cada script con las escenas. <b>Siempre se suben al repositorio.</b> Si alguien no los sube, a los demás se les rompen todas las referencias.</p>
+  </div>
+
+  <h3>Las 6 escenas — creadlas vacías hoy</h3>
+  <div class="tree">
+<b>Assets/_Project/Scenes/</b>
+├── <b>00_MainMenu.unity</b>   <i>índice 0 &mdash; se abre al lanzar el .exe</i>
+├── <b>01_Level_1.unity</b>
+├── <b>02_Level_2.unity</b>
+├── <b>03_Level_3.unity</b>
+├── <b>04_Level_4.unity</b>
+└── <b>05_Credits.unity</b>
+  </div>
+
+  <div class="note">
+    <span class="tag">Sobre el nombre</span>
+    <p>El nombre queda como <b>Verdict Zero</b>, la grafía inglesa correcta — que es la que ya lleva la carpeta del proyecto. Escribidlo así en todas partes: en el <code>Product Name</code>, en el menú, en la carátula y en la documentación. El nivel&nbsp;4 sí se llama <i>Veredicto</i>, en español, porque es un nombre de nivel y no el título del juego.</p>
+  </div>
+</section>
+
+<!-- ============ ROLES ============ -->
+<section id="roles">
+  <div class="phase-head">
+    <div class="phase-num">&rsaquo;</div>
+    <div>
+      <h2>Quién hace qué</h2>
+      <div class="phase-meta"><span>En 4 semanas no hay margen para que dos hagan lo mismo</span></div>
+    </div>
+  </div>
+
+  <p>Con este calendario no hay dos semanas de aprendizaje común: se aprende haciendo la parte propia. Las personas 1 y 2 empiezan a la vez en la semana 1 porque el código es lo que bloquea a todos los demás.</p>
+
+  <div class="cards">
+    <div class="card">
+      <p class="role">Persona 1</p>
+      <h3>Jugador y cámara</h3>
+      <ul>
+        <li>Movimiento, salto y detección de suelo</li>
+        <li>Muerte y reaparición en checkpoint</li>
+        <li>Cámara que sigue al jugador</li>
+        <li>Es quien más presión tiene la semana 1</li>
+      </ul>
+    </div>
+    <div class="card">
+      <p class="role">Persona 2</p>
+      <h3>Enemigos y prefabs</h3>
+      <ul>
+        <li>Enemigo que patrulla, pinchos, checkpoint, meta</li>
+        <li>Convierte todo en prefabs listos para arrastrar</li>
+        <li>Semana 1: ayuda con el nivel de prueba</li>
+        <li>Semana 3: monta dos de los cuatro niveles</li>
+      </ul>
+    </div>
+    <div class="card">
+      <p class="role">Persona 3</p>
+      <h3>Niveles y arte</h3>
+      <ul>
+        <li>Tilemaps de los 4 niveles y colocación de checkpoints</li>
+        <li>Importa el pack de Kenney y hace las animaciones</li>
+        <li>Playtesting: apunta dónde muere y se atasca la gente</li>
+        <li>Semana 1: aprende Tilemap mientras los otros programan</li>
+      </ul>
+    </div>
+    <div class="card">
+      <p class="role">Persona 4</p>
+      <h3>Menús, build y entrega</h3>
+      <ul>
+        <li>Menú principal, pausa, cambio de escena, créditos</li>
+        <li>Sonido y efectos en la semana 4</li>
+        <li><b>Genera una build cada viernes</b> y la prueba en otro PC</li>
+        <li>Lleva el calendario y convoca la reunión</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEMANA 1 ============ -->
+<section id="s1">
+  <div class="phase-head">
+    <div class="phase-num">01</div>
+    <div>
+      <h2>Semana 1 — Que el personaje salte bien</h2>
+      <div class="phase-meta"><span><b>Sin arte.</b> Cubos blancos y ya está</span></div>
+    </div>
+  </div>
+
+  <p>Toda la semana sobre <b>un nivel gris y feo</b>, hasta que moverse y saltar sea agradable. Si el salto se siente mal aquí, se sentirá mal en los cuatro niveles y ya no habrá tiempo de arreglarlo.</p>
+
+  <h3>Lunes y martes: aprender lo mínimo</h3>
+  <p>Los cuatro hacéis el <b>microjuego de plataformas de Unity Learn</b> (<span class="mono">learn.unity.com</span>, gratuito y guiado). Dos días, no más. Con eso entendéis los cinco conceptos que necesita este proyecto: GameObject, Transform, Rigidbody2D, script y prefab. El resto se aprende sobre la marcha.</p>
+
+  <h3>De miércoles a viernes: el jugador</h3>
+  <ol class="steps">
+    <li><strong>Capas de física</strong> En <span class="mono">Project Settings &rsaquo; Tags and Layers</span> cread <code>Player</code>, <code>Ground</code>, <code>Enemy</code> y <code>Hazard</code>. Todo lo demás depende de esto.</li>
+    <li><strong>El jugador</strong> Sprite Renderer + <b>CapsuleCollider2D</b> (la cápsula no se engancha en las esquinas) + <b>Rigidbody2D</b> con <code>Gravity Scale: 3</code>, <code>Collision Detection: Continuous</code>, <code>Interpolate: Interpolate</code> y <b>Freeze Rotation Z</b> marcado, o el personaje rodará por el suelo.</li>
+    <li><strong>Un hijo llamado GroundCheck</strong> Un objeto vacío justo a los pies. Desde ahí se detecta el suelo.</li>
+    <li><strong>Pegad el script de abajo</strong> Y ajustad los números en el Inspector hasta que os guste cómo se siente.</li>
+    <li><strong>El nivel gris</strong> <span class="mono">GameObject &rsaquo; 2D Object &rsaquo; Tilemap</span>. Al Tilemap: <b>Tilemap Collider 2D</b> + <b>Composite Collider 2D</b> + <b>Rigidbody2D</b> en <code>Static</code>, y marcad <b>Used By Composite</b>. Ponedlo en la capa <code>Ground</code>.</li>
+    <li><strong>Cámara</strong> Instalad <b>Cinemachine</b> desde el Package Manager, añadid una cámara 2D y arrastrad el jugador a <b>Follow</b>. Cinco minutos y queda mejor que un script propio.</li>
+    <li><strong>La primera build, el viernes</strong> Aunque solo haya un cubo saltando. Instrucciones en la semana 4 — leedlas ya.</li>
+  </ol>
+
+  <p>El script incluye las dos cosas que separan un plataformas agradable de uno que frustra: <b>coyote time</b> (puedes saltar una décima de segundo después de salir del borde) y <b>jump buffer</b> (si pulsas salto justo antes de aterrizar, se guarda). Son seis líneas y valen su peso en oro.</p>
+
+<pre><code><span class="c">// Assets/_Project/Scripts/PlayerController2D.cs</span>
+using UnityEngine;
+
+[RequireComponent(typeof(Rigidbody2D))]
+public class PlayerController2D : MonoBehaviour
+{
+    [Header("Movimiento")]
+    [SerializeField] private float moveSpeed = 8f;
+    [SerializeField] private float jumpForce = 16f;
+
+    [Header("Detección de suelo")]
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private float checkRadius = 0.18f;
+    [SerializeField] private LayerMask groundLayer;
+
+    [Header("Sensación de salto")]
+    [SerializeField] private float coyoteTime = 0.10f;
+    [SerializeField] private float jumpBuffer = 0.10f;
+
+    private Rigidbody2D rb;
+    private float horizontal, coyoteCounter, bufferCounter;
+
+    private void Awake() =&gt; rb = GetComponent&lt;Rigidbody2D&gt;();
+
+    private void Update()
+    {
+        horizontal = Input.GetAxisRaw("Horizontal");
+
+        bool grounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer);
+        coyoteCounter = grounded ? coyoteTime : coyoteCounter - Time.deltaTime;
+
+        if (Input.GetButtonDown("Jump")) bufferCounter = jumpBuffer;
+        else bufferCounter -= Time.deltaTime;
+
+        if (bufferCounter &gt; 0f &amp;&amp; coyoteCounter &gt; 0f)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            bufferCounter = 0f;
+            coyoteCounter = 0f;
+        }
+
+        <span class="c">// soltar el botón antes corta el salto: altura variable</span>
+        if (Input.GetButtonUp("Jump") &amp;&amp; rb.linearVelocity.y &gt; 0f)
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
+
+        if (horizontal != 0f)
+            transform.localScale = new Vector3(Mathf.Sign(horizontal), 1f, 1f);
+    }
+
+    private void FixedUpdate()
+    {
+        rb.linearVelocity = new Vector2(horizontal * moveSpeed, rb.linearVelocity.y);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (groundCheck == null) return;
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(groundCheck.position, checkRadius);
+    }
+}</code></pre>
+
+  <div class="note trap">
+    <span class="tag">Tres errores que vais a tener</span>
+    <p><b>Excepción al darle a Play, en la línea de <code>Input.GetAxisRaw</code>:</b> falta poner <b>Active Input Handling</b> en <code>Both</code> (paso 4 del día 1) y reiniciar Unity. Vuestro proyecto viene con el Input System nuevo solamente, y ese ajuste es lo que permite usar también el código sencillo de este script.</p>
+    <p><b>El personaje se engancha al correr:</b> os falta el <b>Composite Collider 2D</b> en el tilemap. Es el bug número uno de los plataformas con tiles.</p>
+    <p><b>Error en <code>linearVelocity</code>:</b> en Unity 6 la propiedad se llama así; en versiones anteriores es <code>velocity</code>. Si copiáis código de un tutorial antiguo, es casi siempre esto.</p>
+  </div>
+
+  <div class="gate">
+    <span class="tag">Punto de control · viernes semana 1</span>
+    <p>Alguien de fuera del equipo juega el nivel gris dos minutos y dice, sin que se lo preguntéis, que se siente bien. Y existe un <code>.exe</code> que arranca.</p>
+  </div>
+</section>
+
+<!-- ============ SEMANA 2 ============ -->
+<section id="s2">
+  <div class="phase-head">
+    <div class="phase-num">02</div>
+    <div>
+      <h2>Semana 2 — Que sea un juego</h2>
+      <div class="phase-meta"><span>Ocho piezas, todas prefabs, ninguna complicada</span></div>
+    </div>
+  </div>
+
+  <p>Se construyen las piezas que los cuatro niveles reutilizan. <b>Todo se convierte en prefab</b>: así en la semana 3 solo hay que arrastrarlas al nivel.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Pieza</th><th>Cómo se hace</th><th>Quién</th></tr></thead>
+      <tbody>
+        <tr><td><b>Morir</b></td><td>Un script <code>Kill()</code> en el jugador. Los pinchos y enemigos lo llaman desde <code>OnTriggerEnter2D</code>.</td><td>Persona 1</td></tr>
+        <tr><td><b>Checkpoint</b></td><td>Trigger que guarda la posición. Al morir, el jugador vuelve ahí tras medio segundo.</td><td>Persona 1</td></tr>
+        <tr><td><b>Pinchos</b></td><td>Sprite + collider marcado como <code>Is Trigger</code>, en la capa <code>Hazard</code>. Lo más fácil de la lista.</td><td>Persona 2</td></tr>
+        <tr><td><b>Enemigo</b></td><td>Va y viene entre dos puntos vacíos; si detecta borde o pared, gira. Muere si lo pisas desde arriba.</td><td>Persona 2</td></tr>
+        <tr><td><b>Meta</b></td><td>Trigger que llama a <code>SceneManager.LoadScene("02_Level_2")</code>.</td><td>Persona 4</td></tr>
+        <tr><td><b>Menú principal</b></td><td>Canvas con dos botones: <b>Jugar</b> y <b>Salir</b>. Nada más.</td><td>Persona 4</td></tr>
+        <tr><td><b>Pausa</b></td><td>Tecla <code>Escape</code>, panel encima y <code>Time.timeScale = 0</code>. Botones: Continuar y Menú.</td><td>Persona 4</td></tr>
+        <tr><td><b>Animaciones</b></td><td>Animator con 3 estados: <i>Idle</i>, <i>Run</i>, <i>Jump</i>. Transiciones con los parámetros <code>speed</code> y <code>grounded</code>.</td><td>Persona 3</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note trap">
+    <span class="tag">Trampa clásica</span>
+    <p>Dos personas abriendo la misma escena a la vez. Los archivos <code>.unity</code> y <code>.prefab</code> <b>no se pueden fusionar</b> en Git: uno de los dos pierde el trabajo entero. Regla: <i>se avisa por el chat antes de abrir una escena y al terminar de subirla.</i></p>
+  </div>
+
+  <div class="gate">
+    <span class="tag">Punto de control · viernes semana 2</span>
+    <p>Se arranca en el menú, se juega el nivel 1, se muere, se reaparece en el checkpoint, se llega a la meta y se aterriza en el nivel 2. Con pausa funcionando.</p>
+  </div>
+</section>
+
+<!-- ============ SEMANA 3 ============ -->
+<section id="s3">
+  <div class="phase-head">
+    <div class="phase-num">03</div>
+    <div>
+      <h2>Semana 3 — Los cuatro niveles</h2>
+      <div class="phase-meta"><span><b>Cortos.</b> De 1 a 2 minutos cada uno</span></div>
+    </div>
+  </div>
+
+  <p>Un nivel no es «un espacio con plataformas»: es una lección. Cada uno presenta <b>una</b> idea en un sitio seguro, la practica y la examina. Con esto los cuatro niveles se diseñan casi solos.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Nivel</th><th>Enseña</th><th>Diseño</th><th class="num">Dura</th></tr></thead>
+      <tbody>
+        <tr><td><b>1 &mdash; Ingreso</b></td><td>Correr y saltar</td><td>Casi imposible morir. Huecos anchos. Sin enemigos hasta el final, y ahí uno solo, en terreno plano.</td><td class="num">1 min</td></tr>
+        <tr><td><b>2 &mdash; Vista</b></td><td>Pinchos</td><td>El primer pincho se ve desde arriba antes de tener que saltarlo. Saltos encadenados. Un checkpoint a mitad.</td><td class="num">1–2 min</td></tr>
+        <tr><td><b>3 &mdash; Deliberación</b></td><td>Enemigos en serio</td><td>Enemigos sobre plataformas estrechas, combinados con pinchos. Más verticalidad.</td><td class="num">2 min</td></tr>
+        <tr><td><b>4 &mdash; Veredicto</b></td><td>Nada nuevo</td><td>Examen de todo lo anterior, más rápido y apretado. Un tramo final memorable. Checkpoints generosos.</td><td class="num">2 min</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><b>Repartíos los niveles:</b> persona 3 hace el 1 y el 2, persona 2 hace el 3 y el 4. En paralelo, no en fila. La persona 3 pasa después el arte de Kenney por encima de los cuatro.</p>
+
+  <ol class="steps">
+    <li><strong>Diez minutos de boceto en papel</strong> Antes de tocar el tilemap. Marcad dónde va cada checkpoint y cada enemigo. Ahorra dos horas de trabajo por nivel.</li>
+    <li><strong>Montadlo en gris primero</strong> Jugadlo, corregidlo, y solo entonces poned el arte. Cambiar el tilemap ya decorado cuesta el triple.</li>
+    <li><strong>Que lo juegue alguien de fuera</strong> Sin explicarle nada. Si muere tres veces en el mismo sitio, el problema es el nivel, no el jugador.</li>
+    <li><strong>Sprites de píxeles: ajustes de importación</strong> En el Inspector de cada sprite: <b>Filter Mode</b> = <code>Point (no filter)</code>, <b>Compression</b> = <code>None</code>, <b>Pixels Per Unit</b> = 32. Sin esto salen borrosos.</li>
+  </ol>
+
+  <div class="note trap">
+    <span class="tag">Trampa clásica</span>
+    <p>Diseñar la dificultad según lo bien que jugáis vosotros. Habéis probado ese salto cien veces; quien os evalúe lo ve por primera vez. <b>Todo debería ser bastante más fácil de lo que os parece.</b></p>
+  </div>
+
+  <div class="gate">
+    <span class="tag">Punto de control · viernes semana 3</span>
+    <p>El juego se completa entero, del menú a los créditos, con arte puesto. <b>A partir de aquí no se añade nada nuevo</b> — solo se arregla y se pule.</p>
+  </div>
+</section>
+
+<!-- ============ SEMANA 4 ============ -->
+<section id="s4">
+  <div class="phase-head">
+    <div class="phase-num">04</div>
+    <div>
+      <h2>Semana 4 — Pulir y generar el .exe</h2>
+      <div class="phase-meta"><span><b>Lunes y martes:</b> pulido &middot; <b>Miércoles:</b> build &middot; <b>Jueves:</b> arreglar &middot; <b>Viernes:</b> entregar</span></div>
+    </div>
+  </div>
+
+  <h3>Pulido — solo estas cuatro cosas</h3>
+  <ul class="bul">
+    <li><b>Sonido para todo.</b> Salto, muerte, enemigo aplastado, botón del menú, meta. Es lo más barato de la lista y lo que más cambia la impresión: un juego con sonido parece el doble de terminado que uno mudo.</li>
+    <li><b>Música.</b> Una pista para el menú y una para los niveles, en bucle.</li>
+    <li><b>Fundido a negro entre escenas.</b> Quita el parpadeo brusco al cambiar de nivel.</li>
+    <li><b>Partículas al morir.</b> Un pequeño estallido cuando muere el jugador o el enemigo.</li>
+  </ul>
+  <p>Si sobra tiempo: sacudida corta de cámara al morir, y escalar levemente al jugador al aterrizar. Nada más.</p>
+
+  <h3>Generar el .exe</h3>
+  <ol class="steps">
+    <li><strong>Añadid TODAS las escenas</strong> En <span class="mono">File &rsaquo; Build Profiles</span> (o <span class="mono">Build Settings</span>), abrid cada escena y pulsad <b>Add Open Scenes</b>. <code>00_MainMenu</code> tiene que quedar en el <b>índice 0</b>. Una escena que no esté en esa lista <b>no existe en el .exe</b>, aunque funcione en el editor.</li>
+    <li><strong>Player Settings</strong> <b>Company Name</b> = nombre del equipo. <b>Product Name</b> = <code>Verdict Zero</code> (esto da nombre al ejecutable). Poned el icono en <b>Default Icon</b>.</li>
+    <li><strong>Ventana</strong> <b>Fullscreen Mode</b> = <code>Fullscreen Window</code>, resolución por defecto 1920&times;1080.</li>
+    <li><strong>Plataforma</strong> <b>Windows</b>, <b>x86_64</b>. En <b>Scripting Backend</b> dejad <code>Mono</code>: compila en minutos en vez de en media hora.</li>
+    <li><strong>Cero errores rojos en la consola</strong> Los avisos amarillos se pueden dejar.</li>
+    <li><strong>Build en una carpeta nueva y vacía</strong> <code>Builds/VerdictZero_v1/</code>, <b>fuera</b> de la carpeta <code>Assets</code>. Tarda entre 2 y 20 minutos. No canceléis.</li>
+  </ol>
+
+  <p>Lo que sale no es un archivo suelto, es una carpeta:</p>
+  <div class="tree">
+<b>VerdictZero_v1/</b>
+├── <b>Verdict Zero.exe</b>
+├── <b>Verdict Zero_Data/</b>    <i>TODO el juego está aquí dentro</i>
+├── <b>UnityPlayer.dll</b>
+└── <b>MonoBleedingEdge/</b>
+  </div>
+
+  <div class="note trap">
+    <span class="tag">El fallo de entrega más frecuente</span>
+    <p>Enviar solo el <code>.exe</code>. Sin la carpeta <code>_Data</code> al lado no arranca: da error y se cierra. <b>Se comprime la carpeta entera en un ZIP</b> y se envía eso.</p>
+  </div>
+
+  <div class="note">
+    <span class="tag">El aviso de Windows es normal</span>
+    <p>SmartScreen dirá «Windows protegió su PC» porque el ejecutable no está firmado. Se pulsa <b>Más información &rsaquo; Ejecutar de todas formas</b>. Ponedlo en el <code>LEEME.txt</code> para que nadie piense que es un virus.</p>
+  </div>
+
+  <div class="gate">
+    <span class="tag">Punto de control · jueves semana 4</span>
+    <p>Una persona ajena al equipo descarga el ZIP en su propio ordenador, lo descomprime y termina los cuatro niveles sin ayuda vuestra. El viernes es solo para entregar.</p>
+  </div>
+</section>
+
+<!-- ============ REGLAS ============ -->
+<section id="reglas">
+  <div class="phase-head">
+    <div class="phase-num">&rsaquo;</div>
+    <div>
+      <h2>Cinco reglas</h2>
+      <div class="phase-meta"><span>Pegadlas en el chat del grupo hoy</span></div>
+    </div>
+  </div>
+
+  <ol class="steps">
+    <li><strong>Una escena, una persona</strong> Se avisa antes de abrirla y al terminar de subirla. Las escenas y prefabs no se fusionan: el trabajo de alguien se pierde entero.</li>
+    <li><strong>Descargar antes de empezar, subir al terminar</strong> Cada sesión, aunque esté a medias. Un cambio pequeño y frecuente vale más que uno gigante el domingo.</li>
+    <li><strong>Todo lo que se repite es un prefab</strong> Si un enemigo está en tres niveles y no es prefab, arreglar un fallo son tres trabajos.</li>
+    <li><strong>Los números van en el Inspector</strong> Usad <code>[SerializeField]</code>. Así quien diseña niveles ajusta la velocidad sin abrir un script.</li>
+    <li><strong>Quince minutos cada día, no una reunión larga a la semana</strong> Tres preguntas: qué hice, qué haré, en qué estoy atascado. Con cuatro semanas, nadie puede estar atascado más de un día en silencio.</li>
+  </ol>
+</section>
+
+<!-- ============ SI VAIS TARDE ============ -->
+<section id="retraso">
+  <div class="phase-head">
+    <div class="phase-num">&rsaquo;</div>
+    <div>
+      <h2>Si vais con retraso</h2>
+      <div class="phase-meta"><span>Recortad en este orden exacto</span></div>
+    </div>
+  </div>
+
+  <p>Vais a ir con retraso — es normal. Lo que decide la nota es <b>qué</b> recortáis. Id quitando de arriba abajo:</p>
+
+  <ol class="steps">
+    <li><strong>Acortad los niveles</strong> Cuatro niveles de 45 segundos siguen siendo cuatro niveles. Es el recorte que menos se nota.</li>
+    <li><strong>Quitad el enemigo, dejad los pinchos</strong> Un plataformas de obstáculos fijos funciona perfectamente y os ahorra el sistema entero de enemigos.</li>
+    <li><strong>Que los cuatro niveles compartan un solo tileset</strong> Sin variación visual entre niveles. Cambia la forma, no el decorado.</li>
+    <li><strong>Animación única</strong> Solo el sprite quieto, sin animar. Feo, pero se entrega.</li>
+  </ol>
+
+  <div class="note trap">
+    <span class="tag">Lo que nunca se recorta</span>
+    <p>La semana 4. Un juego pequeño y terminado se entrega; uno grande y roto, no. Si el miércoles de la semana 4 no hay un <code>.exe</code> probado en otro ordenador, no importa lo bueno que sea el juego en vuestro editor.</p>
+  </div>
+</section>
+
+<!-- ============ ENTREGA ============ -->
+<section id="entrega">
+  <div class="phase-head">
+    <div class="phase-num">&rsaquo;</div>
+    <div>
+      <h2>Lista de entrega</h2>
+      <div class="phase-meta"><span>Repasadla los cuatro juntos el jueves</span></div>
+    </div>
+  </div>
+
+  <ul class="check">
+    <li>Las 6 escenas están en Build Profiles, con <code>00_MainMenu</code> en el índice 0</li>
+    <li>Product Name dice <b>Verdict Zero</b> y el icono está puesto</li>
+    <li>La consola no tiene ni un error rojo</li>
+    <li>La build se ha probado <b>en un ordenador sin Unity</b></li>
+    <li>Menú &rarr; 4 niveles &rarr; créditos &rarr; salir funciona de principio a fin</li>
+    <li>El botón de salir cierra el juego de verdad (<code>Application.Quit()</code>)</li>
+    <li>Los créditos listan al equipo y el pack de arte usado</li>
+    <li>El ZIP contiene la <b>carpeta entera</b>, no solo el <code>.exe</code></li>
+    <li>Hay un <code>LEEME.txt</code> con los controles y el aviso de SmartScreen</li>
+    <li>Alguien ajeno al equipo ha completado el juego sin ayuda</li>
+  </ul>
+</section>
+
+<hr>
+
+<footer>
+  <p><b>Verdict Zero</b> &mdash; plan de 4 semanas. La regla que resume todas las demás: cuatro niveles cortos y terminados valen más que dos niveles ambiciosos y un <code>.exe</code> que no arranca.</p>
+</footer>
+
+</main>
+</div>
+</div>
+<style>
+@page { size: A4; margin: 14mm 13mm; }
+@media print {
+  html, body { background: #ffffff !important; }
+  body { padding: 0 !important; font-size: 10.5pt; line-height: 1.55;
+         font-family: Georgia, "Times New Roman", serif !important; }
+  h1, h2, h3, h4, .sans, table, .chip, .rail, .phase-num, .phase-meta,
+  .note .tag, .gate .tag, .card .role, .check li, ol.steps > li > strong, footer {
+         font-family: "Segoe UI", Tahoma, Arial, sans-serif !important; }
+  code, kbd, pre, .mono, .tree { font-family: Consolas, "Courier New", monospace !important; }
+
+  .wrap { max-width: 100% !important; }
+  .rail { display: none !important; }
+  .grid { display: block !important; }
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+  .masthead { padding: 0 0 18px !important; break-after: avoid; }
+  h1 { font-size: 44pt !important; letter-spacing: -.03em !important; }
+  .deck { font-size: 12pt !important; }
+
+  section { padding-top: 22px !important; break-inside: auto; }
+  h2, h3 { break-after: avoid; break-inside: avoid; }
+  .phase-head { break-inside: avoid; break-after: avoid; }
+
+  .card, .gate, .note, .tree, pre, .tw { break-inside: avoid; }
+  ol.steps > li, .check li, ul.bul li { break-inside: avoid; }
+  tr { break-inside: avoid; }
+
+  .tw { overflow: visible !important; }
+  table { min-width: 0 !important; font-size: 9pt; }
+  th, td { padding: 7px 9px !important; }
+
+  pre { overflow: visible !important; white-space: pre-wrap !important;
+        word-break: break-word; font-size: 8.2pt !important; line-height: 1.45 !important; }
+  .tree { overflow: visible !important; font-size: 8.5pt !important; }
+
+  .cards { grid-template-columns: 1fr 1fr !important; }
+  p { max-width: none !important; }
+  a { color: inherit !important; text-decoration: none !important; }
+}
+</style>
+</html>
